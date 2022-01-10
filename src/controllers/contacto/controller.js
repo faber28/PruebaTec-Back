@@ -1,9 +1,11 @@
 const router = require('express').Router();
 const { Contacto } = require('../../db/index');
 
-router.get('/', async (req,res)=> {
-    const contactos = await Contacto.findAll();
-    res.json(contactos);
+router.get('/:id', async (req,res)=> {
+    const contacto = await Contacto.findAll({
+        where: {idUser: req.params.id}
+    });
+    res.json(contacto);
 });
 
 router.post('/', async (req, res) => {
