@@ -6,13 +6,14 @@ const moment = require('moment');
 const jwt = require('jwt-simple');
 
 router.post('/registro', [
+    check('idUser','Identificación obligatorio').not().isEmpty(),
     check('username','Nombre usuario obligatorio').not().isEmpty(),
     check('password','Contraseña obligatoria').not().isEmpty(),
     check('email','Agregue un correo electrónico').isEmail()
 ] ,async (req, res) => {
     const verificar = validationResult(req);
     if( !verificar.isEmpty()){
-        return res.status(422).json({motivo: verificar.array()})
+        return res.json({motivo: verificar.array()})
     }
     req.body.password = bcrypt.hashSync(req.body.password, 10);
     const user = await User.create(req.body);
@@ -27,8 +28,7 @@ router.post('/login', async (req, res) => {
         
         if(comparar){
             const token = createToken(user);
-            res.json({success: token});
-            console.log(token)
+            res.json({success: token, data: user});
         }else{
             res.json({error: 'Error en usuario y/o contraseña'});
         }

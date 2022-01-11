@@ -8,6 +8,11 @@ router.get('/:id', async (req,res)=> {
     res.json(contacto);
 });
 
+router.get('/editar/:id', async (req,res)=> {
+    const contacto = await Contacto.findByPk(req.params.id);
+    res.json(contacto);
+});
+
 router.post('/', async (req, res) => {
     const contacto = await Contacto.create(req.body);
     res.json(contacto);
